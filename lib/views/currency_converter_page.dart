@@ -61,24 +61,21 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
     });
 
     try {
-      double result = await _currencyService.fetchCurrencies(
+      List<double> results = await _currencyService.fetchCurrencies(
         _baseCurrency,
         _targetCurrency,
         _inputAmount,
       );
-      double rateResult = await _currencyService.fetchRate(_baseCurrency, _targetCurrency);
-      print('here');
       setState(() {
-        _convertedAmount = result;
-        _rate = rateResult;
+        _convertedAmount = results[1];
+        _rate = results[0];
       });
     } catch (e) {
-      print('this');
       setState(() {
         _convertedAmount = 0.0;
         _rate = 0.0;
       });
-      print('Failed to convert currency: $e');
+
     } finally {
       setState(() {
         _isLoading = false;
@@ -90,14 +87,14 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Currency Converter'),
+        title: const Text('Currency Converter'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(labelText: 'Amount'),
+              decoration: const InputDecoration(labelText: 'Amount'),
               keyboardType: TextInputType.number,
               onChanged: _setInputAmount,
             ),
@@ -114,7 +111,7 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
                     );
                   }).toList(),
                 ),
-                Icon(Icons.arrow_forward),
+                const Icon(Icons.arrow_forward),
                 DropdownButton<String>(
                   value: _targetCurrency,
                   onChanged: _setTargetCurrency,
@@ -128,17 +125,17 @@ class _CurrencyConverterPageState extends State<CurrencyConverterPage> {
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _convertCurrency,
-              child: _isLoading ? CircularProgressIndicator() : Text('Convert'),
+              child: _isLoading ? const CircularProgressIndicator() : const Text('Convert'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Converted Amount: ${_convertedAmount.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Rate: ${_rate.toStringAsFixed(6)}',
               style: const TextStyle(fontSize: 17),
